@@ -54,7 +54,10 @@ export type BuilderToParentMessage =
     });
 
 export type ParentToBuilderMessage =
-  | (ConfigMessage<typeof builderEventTypes.init> & { draftState: DraftState })
+  | (ConfigMessage<typeof builderEventTypes.init> & {
+      /** Missing means unsaved-draft for legacy version 1 messages. */
+      draftState?: DraftState;
+    })
   | (MessageEnvelope<typeof builderEventTypes.state> & { draftState: DraftState })
   | (MessageEnvelope<typeof builderEventTypes.assetSelectSuccess> & {
       requestId: string;
@@ -110,7 +113,7 @@ export function isBuilderMessage(value: unknown): value is BuilderMessage {
     case builderEventTypes.publish:
       return hasConfig(value);
     case builderEventTypes.init:
-      return hasConfig(value) && hasDraftState(value);
+      return hasConfig(value) && (value['draftState'] === undefined || hasDraftState(value));
     case builderEventTypes.state:
       return hasDraftState(value);
     case builderEventTypes.scroll:

@@ -43,7 +43,7 @@ export function isBuilderMessage(value) {
         case builderEventTypes.publish:
             return hasConfig(value);
         case builderEventTypes.init:
-            return hasConfig(value) && hasDraftState(value);
+            return hasConfig(value) && (value['draftState'] === undefined || hasDraftState(value));
         case builderEventTypes.state:
             return hasDraftState(value);
         case builderEventTypes.scroll:

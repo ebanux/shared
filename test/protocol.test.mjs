@@ -32,6 +32,7 @@ test('rejects unsupported protocol versions', () => {
 test('validates config and state payloads', () => {
   assert.equal(isBuilderMessage({ type: builderEventTypes.apply, config }), true);
   assert.equal(isBuilderMessage({ type: builderEventTypes.apply }), false);
+  assert.equal(isBuilderMessage({ type: builderEventTypes.init, config }), true);
   assert.equal(isBuilderMessage({
     type: builderEventTypes.init,
     protocolVersion: 1,

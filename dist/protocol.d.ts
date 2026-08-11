@@ -43,7 +43,8 @@ export type BuilderToParentMessage = MessageEnvelope<typeof builderEventTypes.re
     mediaKind?: string;
 });
 export type ParentToBuilderMessage = (ConfigMessage<typeof builderEventTypes.init> & {
-    draftState: DraftState;
+    /** Missing means unsaved-draft for legacy version 1 messages. */
+    draftState?: DraftState;
 }) | (MessageEnvelope<typeof builderEventTypes.state> & {
     draftState: DraftState;
 }) | (MessageEnvelope<typeof builderEventTypes.assetSelectSuccess> & {

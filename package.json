@@ -1,6 +1,6 @@
 {
   "name": "@ebanux/builder-contract",
-  "version": "0.1.0",
+  "version": "0.1.1",
   "description": "Versioned wire contract between QRLynk builder hosts and builder runtimes.",
   "license": "UNLICENSED",
   "type": "module",
