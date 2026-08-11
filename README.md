@@ -12,6 +12,8 @@ It owns:
 
 It does not own React hooks, browser orchestration, routing, persistence, asset storage, page normalization, templates, or UI.
 
+The package publishes equivalent ESM and CommonJS runtime entries plus one declaration surface so it can be consumed by Vite/Next production builds and digitalcard's Jest runtime.
+
 ## Branches
 
 - `master`: default branch and stable SemVer releases.

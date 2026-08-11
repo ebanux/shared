@@ -7,7 +7,7 @@ import {
   getBuilderProtocolVersion,
   isBuilderEventType,
   isBuilderMessage,
-} from '../dist/index.js';
+} from '../dist/esm/index.js';
 
 const config = { productType: 'digital-business-card', blocks: [] };
 
