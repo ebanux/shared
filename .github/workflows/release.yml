@@ -8,7 +8,6 @@ on:
 
 permissions:
   contents: write
-  pull-requests: write
 
 concurrency:
   group: release-master
@@ -20,6 +19,8 @@ jobs:
     steps:
       - name: Checkout repository
         uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
       - name: Setup Node.js
         uses: actions/setup-node@v4
         with:
@@ -31,10 +32,20 @@ jobs:
         run: |
           npm run verify
           git diff --exit-code -- dist
-      - name: Create or update release pull request
+      - name: Determine release tag
         id: release
-        uses: googleapis/release-please-action@5c625bfb5d1ff62eadeeb3772007f7f66fdcf071 # v4.4.1
-        with:
-          target-branch: master
-          config-file: release-please-config.json
-          manifest-file: .release-please-manifest.json
+        run: |
+          version="$(node --print "require('./package.json').version")"
+          tag="v${version}"
+
+          if git show-ref --tags --verify --quiet "refs/tags/${tag}"; then
+            echo "::error::${tag} already exists. Bump the package version before merging develop into master."
+            exit 1
+          fi
+
+          echo "tag=${tag}" >> "$GITHUB_OUTPUT"
+      - name: Create GitHub release
+        env:
+          GH_TOKEN: ${{ github.token }}
+          RELEASE_TAG: ${{ steps.release.outputs.tag }}
+        run: gh release create "$RELEASE_TAG" --target "$GITHUB_SHA" --title "$RELEASE_TAG" --generate-notes
