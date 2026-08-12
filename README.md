@@ -34,6 +34,12 @@ Release commits include the built `dist` artifacts, so consumers do not compile 
 - Release pull requests promote `develop` to `master`.
 - Hotfixes branch from `master` and are back-merged into `develop`.
 
+## Releases
+
+Merging `develop` into `master` runs Release Please. Releasable Conventional Commits such as `fix:` and `feat:` create or update a release pull request against `master`. Merging that release pull request creates the immutable SemVer tag and GitHub Release.
+
+The release workflow verifies the package and rejects a release when the tracked `dist` artifacts do not match the TypeScript source. After a release, consumers update their public GitHub tarball dependency to the new tag.
+
 ## Version 1 contract
 
 Every message must include `protocolVersion: 1`; missing or unsupported versions are rejected. `INIT` messages require `draftState`, and asset-selection success messages require `key` and `contentType` metadata.
