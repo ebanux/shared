@@ -14,6 +14,18 @@ It does not own React hooks, browser orchestration, routing, persistence, asset 
 
 The package publishes equivalent ESM and CommonJS runtime entries plus one declaration surface so it can be consumed by Vite/Next production builds and digitalcard's Jest runtime.
 
+## Installation
+
+Consumers install a public release-tag tarball over HTTPS. This preserves the package boundary without requiring registry or Git credentials:
+
+```json
+{
+  "@ebanux/builder-contract": "https://github.com/ebanux/shared/archive/refs/tags/v0.2.2.tar.gz"
+}
+```
+
+Release commits include the built `dist` artifacts, so consumers do not compile the contract source with their application toolchains.
+
 ## Branches
 
 - `master`: default branch and stable SemVer releases.
