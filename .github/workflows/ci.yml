@@ -11,6 +11,37 @@ permissions:
   contents: read
 
 jobs:
+  validate-release-version:
+    if: github.event_name == 'pull_request' && github.base_ref == 'master' && github.head_ref == 'develop'
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Verify package and lockfile versions match
+        run: |
+          node <<'NODE'
+          const packageVersion = require('./package.json').version;
+          const lockfile = require('./package-lock.json');
+          const lockfileVersions = [lockfile.version, lockfile.packages?.['']?.version];
+
+          if (lockfileVersions.some((version) => version !== packageVersion)) {
+            console.error(`package.json is ${packageVersion}, but package-lock.json contains ${lockfileVersions.join(' and ')}`);
+            process.exit(1);
+          }
+
+          console.log(`Release version files agree on ${packageVersion}`);
+          NODE
+      - name: Verify release tag is available
+        run: |
+          version="$(node --print "require('./package.json').version")"
+          tag="v${version}"
+
+          if git ls-remote --exit-code --tags origin "refs/tags/${tag}" > /dev/null 2>&1; then
+            echo "::error::${tag} already exists. Run npm version patch, minor, or major --no-git-tag-version before promoting develop."
+            exit 1
+          fi
+
+          echo "Release tag ${tag} is available"
+
   verify:
     runs-on: ubuntu-latest
     strategy:

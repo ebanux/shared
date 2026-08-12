@@ -36,7 +36,7 @@ Release commits include the built `dist` artifacts, so consumers do not compile 
 
 ## Releases
 
-Before promoting `develop` to `master`, update the version in `package.json` and `package-lock.json`. Merging that pull request runs the release workflow, which creates the matching immutable SemVer tag and GitHub Release directly from the merge commit. No automated release pull request or approval is involved.
+Before promoting `develop` to `master`, run `npm version patch --no-git-tag-version` (or use `minor`/`major` as appropriate) and commit both version files. Promotion CI verifies that `package.json` and `package-lock.json` agree and that the version tag is still available. Merging that pull request runs the release workflow, which creates the matching immutable SemVer tag and GitHub Release directly from the merge commit. No automated release pull request or approval is involved.
 
 The release workflow verifies the package and rejects a release when the tracked `dist` artifacts do not match the TypeScript source or when the version tag already exists. After a release, consumers update their public GitHub tarball dependency to the new tag.
 
