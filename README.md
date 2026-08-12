@@ -20,7 +20,7 @@ Consumers install a public release-tag tarball over HTTPS. This preserves the pa
 
 ```json
 {
-  "@ebanux/builder-contract": "https://github.com/ebanux/shared/archive/refs/tags/v0.2.2.tar.gz"
+  "@ebanux/builder-contract": "https://github.com/ebanux/shared/archive/refs/tags/v0.2.3.tar.gz"
 }
 ```
 
@@ -31,14 +31,14 @@ Release commits include the built `dist` artifacts, so consumers do not compile 
 - `master`: default branch and stable SemVer releases.
 - `develop`: integration branch.
 - Feature and fix branches target `develop`.
-- Release pull requests promote `develop` to `master`.
+- Pull requests promote `develop` to `master`.
 - Hotfixes branch from `master` and are back-merged into `develop`.
 
 ## Releases
 
-Merging `develop` into `master` runs Release Please. Releasable Conventional Commits such as `fix:` and `feat:` create or update a release pull request against `master`. Merging that release pull request creates the immutable SemVer tag and GitHub Release.
+Before promoting `develop` to `master`, update the version in `package.json` and `package-lock.json`. Merging that pull request runs the release workflow, which creates the matching immutable SemVer tag and GitHub Release directly from the merge commit. No automated release pull request or approval is involved.
 
-The release workflow verifies the package and rejects a release when the tracked `dist` artifacts do not match the TypeScript source. After a release, consumers update their public GitHub tarball dependency to the new tag.
+The release workflow verifies the package and rejects a release when the tracked `dist` artifacts do not match the TypeScript source or when the version tag already exists. After a release, consumers update their public GitHub tarball dependency to the new tag.
 
 ## Version 1 contract
 
