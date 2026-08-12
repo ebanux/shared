@@ -24,8 +24,7 @@ export type JsonObject = {
 export type JsonValue = JsonArray | JsonObject | JsonPrimitive;
 interface MessageEnvelope<TType extends BuilderEventType> {
     type: TType;
-    /** Missing means legacy protocol version 1 during the initial migration. */
-    protocolVersion?: BuilderProtocolVersion;
+    protocolVersion: BuilderProtocolVersion;
 }
 type ConfigMessage<TType extends BuilderEventType> = MessageEnvelope<TType> & {
     config: JsonObject;
@@ -43,17 +42,14 @@ export type BuilderToParentMessage = MessageEnvelope<typeof builderEventTypes.re
     mediaKind?: string;
 });
 export type ParentToBuilderMessage = (ConfigMessage<typeof builderEventTypes.init> & {
-    /** Missing means unsaved-draft for legacy version 1 messages. */
-    draftState?: DraftState;
+    draftState: DraftState;
 }) | (MessageEnvelope<typeof builderEventTypes.state> & {
     draftState: DraftState;
 }) | (MessageEnvelope<typeof builderEventTypes.assetSelectSuccess> & {
     requestId: string;
     url: string;
-    /** Optional in v1 because the current parent does not always send it. */
-    key?: string;
-    /** Optional in v1 because the current parent does not always send it. */
-    contentType?: string;
+    key: string;
+    contentType: string;
 }) | (MessageEnvelope<typeof builderEventTypes.assetSelectError> & {
     requestId: string;
     message: string;
