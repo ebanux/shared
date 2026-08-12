@@ -7,7 +7,7 @@ It owns:
 - protocol version and event names;
 - JSON-safe message types;
 - runtime message guards;
-- backward-compatibility rules;
+- protocol-version validation;
 - contract fixtures and tests.
 
 It does not own React hooks, browser orchestration, routing, persistence, asset storage, page normalization, templates, or UI.
@@ -22,9 +22,9 @@ The package publishes equivalent ESM and CommonJS runtime entries plus one decla
 - Release pull requests promote `develop` to `master`.
 - Hotfixes branch from `master` and are back-merged into `develop`.
 
-## Version 1 compatibility
+## Version 1 contract
 
-Messages without `protocolVersion` are treated as version 1 during the initial migration. Newer unsupported versions are rejected. A version 1 `INIT` message may omit `draftState`, which the builder interprets as `unsaved-draft`. The version 1 asset-selection success payload permits missing `key` and `contentType` because the current parent application does not always send them.
+Every message must include `protocolVersion: 1`; missing or unsupported versions are rejected. `INIT` messages require `draftState`, and asset-selection success messages require `key` and `contentType` metadata.
 
 ## Commands
 

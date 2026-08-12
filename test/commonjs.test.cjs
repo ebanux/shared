@@ -9,5 +9,8 @@ const {
 
 test('exports the contract through CommonJS', () => {
   assert.equal(BUILDER_PROTOCOL_VERSION, 1);
-  assert.equal(isBuilderMessage({ type: builderEventTypes.ready }), true);
+  assert.equal(isBuilderMessage({
+    type: builderEventTypes.ready,
+    protocolVersion: BUILDER_PROTOCOL_VERSION,
+  }), true);
 });

@@ -17,52 +17,65 @@ test('recognizes the complete current event vocabulary', () => {
   assert.equal(isBuilderEventType('ATAP_BUILDER_UNKNOWN'), false);
 });
 
-test('accepts legacy messages without a protocol version as version 1', () => {
-  const message = { type: builderEventTypes.ready };
-  assert.equal(getBuilderProtocolVersion(message), BUILDER_PROTOCOL_VERSION);
-  assert.equal(isBuilderMessage(message), true);
-});
+test('requires the current protocol version', () => {
+  const current = { type: builderEventTypes.ready, protocolVersion: BUILDER_PROTOCOL_VERSION };
+  const missing = { type: builderEventTypes.ready };
+  const unsupported = { type: builderEventTypes.ready, protocolVersion: 2 };
 
-test('rejects unsupported protocol versions', () => {
-  const message = { type: builderEventTypes.ready, protocolVersion: 2 };
-  assert.equal(getBuilderProtocolVersion(message), null);
-  assert.equal(isBuilderMessage(message), false);
+  assert.equal(getBuilderProtocolVersion(current), BUILDER_PROTOCOL_VERSION);
+  assert.equal(isBuilderMessage(current), true);
+  assert.equal(getBuilderProtocolVersion(missing), null);
+  assert.equal(isBuilderMessage(missing), false);
+  assert.equal(getBuilderProtocolVersion(unsupported), null);
+  assert.equal(isBuilderMessage(unsupported), false);
 });
 
 test('validates config and state payloads', () => {
-  assert.equal(isBuilderMessage({ type: builderEventTypes.apply, config }), true);
-  assert.equal(isBuilderMessage({ type: builderEventTypes.apply }), false);
-  assert.equal(isBuilderMessage({ type: builderEventTypes.init, config }), true);
+  const protocolVersion = BUILDER_PROTOCOL_VERSION;
+  assert.equal(isBuilderMessage({ type: builderEventTypes.apply, protocolVersion, config }), true);
+  assert.equal(isBuilderMessage({ type: builderEventTypes.apply, protocolVersion }), false);
+  assert.equal(isBuilderMessage({ type: builderEventTypes.init, protocolVersion, config }), false);
   assert.equal(isBuilderMessage({
     type: builderEventTypes.init,
-    protocolVersion: 1,
+    protocolVersion,
     config,
     draftState: 'saved-draft',
   }), true);
-  assert.equal(isBuilderMessage({ type: builderEventTypes.state, draftState: 'invalid' }), false);
+  assert.equal(isBuilderMessage({ type: builderEventTypes.state, protocolVersion, draftState: 'invalid' }), false);
 });
 
-test('preserves the current version 1 asset success compatibility', () => {
+test('requires complete asset success metadata', () => {
   assert.equal(isBuilderMessage({
     type: builderEventTypes.assetSelectSuccess,
+    protocolVersion: BUILDER_PROTOCOL_VERSION,
     requestId: 'request-1',
     url: 'https://assets.example/image.png',
+    key: 'assets/image.png',
+    contentType: 'image/png',
   }), true);
 
   assert.equal(isBuilderMessage({
     type: builderEventTypes.assetSelectSuccess,
+    protocolVersion: BUILDER_PROTOCOL_VERSION,
     requestId: 'request-1',
+    url: 'https://assets.example/image.png',
   }), false);
 });
 
 test('validates request correlation and finite scroll payloads', () => {
+  const protocolVersion = BUILDER_PROTOCOL_VERSION;
   assert.equal(isBuilderMessage({
     type: builderEventTypes.assetSelectRequest,
+    protocolVersion,
     requestId: 'request-1',
     productType: 'digital-business-card',
     mediaKind: 'image',
   }), true);
-  assert.equal(isBuilderMessage({ type: builderEventTypes.assetSelectRequest }), false);
-  assert.equal(isBuilderMessage({ type: builderEventTypes.scroll, scrollTop: 120 }), true);
-  assert.equal(isBuilderMessage({ type: builderEventTypes.scroll, scrollTop: Number.NaN }), false);
+  assert.equal(isBuilderMessage({ type: builderEventTypes.assetSelectRequest, protocolVersion }), false);
+  assert.equal(isBuilderMessage({ type: builderEventTypes.scroll, protocolVersion, scrollTop: 120 }), true);
+  assert.equal(isBuilderMessage({
+    type: builderEventTypes.scroll,
+    protocolVersion,
+    scrollTop: Number.NaN,
+  }), false);
 });

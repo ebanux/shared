@@ -23,7 +23,7 @@ const eventTypeSet = new Set(Object.values(exports.builderEventTypes));
 const draftStateSet = new Set(['new', 'unsaved-draft', 'saved-draft', 'published']);
 const isRecord = (value) => typeof value === 'object' && value !== null && !Array.isArray(value);
 const isOptionalString = (value) => value === undefined || typeof value === 'string';
-const hasSupportedVersion = (value) => value['protocolVersion'] === undefined || value['protocolVersion'] === exports.BUILDER_PROTOCOL_VERSION;
+const hasSupportedVersion = (value) => value['protocolVersion'] === exports.BUILDER_PROTOCOL_VERSION;
 const hasConfig = (value) => isRecord(value['config']);
 const hasDraftState = (value) => typeof value['draftState'] === 'string' && draftStateSet.has(value['draftState']);
 function isBuilderEventType(value) {
@@ -49,7 +49,7 @@ function isBuilderMessage(value) {
         case exports.builderEventTypes.publish:
             return hasConfig(value);
         case exports.builderEventTypes.init:
-            return hasConfig(value) && (value['draftState'] === undefined || hasDraftState(value));
+            return hasConfig(value) && hasDraftState(value);
         case exports.builderEventTypes.state:
             return hasDraftState(value);
         case exports.builderEventTypes.scroll:
@@ -66,8 +66,8 @@ function isBuilderMessage(value) {
         case exports.builderEventTypes.assetSelectSuccess:
             return typeof value['requestId'] === 'string'
                 && typeof value['url'] === 'string'
-                && isOptionalString(value['key'])
-                && isOptionalString(value['contentType']);
+                && typeof value['key'] === 'string'
+                && typeof value['contentType'] === 'string';
         case exports.builderEventTypes.assetSelectError:
             return typeof value['requestId'] === 'string' && typeof value['message'] === 'string';
     }
