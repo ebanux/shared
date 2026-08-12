@@ -1,8 +1,12 @@
 {
   "name": "@ebanux/builder-contract",
-  "version": "0.1.2",
+  "version": "0.2.2",
   "description": "Versioned wire contract between QRLynk builder hosts and builder runtimes.",
   "license": "UNLICENSED",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/ebanux/shared.git"
+  },
   "type": "module",
   "main": "./dist/cjs/index.js",
   "module": "./dist/esm/index.js",

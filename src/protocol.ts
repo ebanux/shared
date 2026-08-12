@@ -26,8 +26,7 @@ export type JsonValue = JsonArray | JsonObject | JsonPrimitive;
 
 interface MessageEnvelope<TType extends BuilderEventType> {
   type: TType;
-  /** Missing means legacy protocol version 1 during the initial migration. */
-  protocolVersion?: BuilderProtocolVersion;
+  protocolVersion: BuilderProtocolVersion;
 }
 
 type ConfigMessage<TType extends BuilderEventType> = MessageEnvelope<TType> & {
@@ -55,17 +54,14 @@ export type BuilderToParentMessage =
 
 export type ParentToBuilderMessage =
   | (ConfigMessage<typeof builderEventTypes.init> & {
-      /** Missing means unsaved-draft for legacy version 1 messages. */
-      draftState?: DraftState;
+      draftState: DraftState;
     })
   | (MessageEnvelope<typeof builderEventTypes.state> & { draftState: DraftState })
   | (MessageEnvelope<typeof builderEventTypes.assetSelectSuccess> & {
       requestId: string;
       url: string;
-      /** Optional in v1 because the current parent does not always send it. */
-      key?: string;
-      /** Optional in v1 because the current parent does not always send it. */
-      contentType?: string;
+      key: string;
+      contentType: string;
     })
   | (MessageEnvelope<typeof builderEventTypes.assetSelectError> & {
       requestId: string;
@@ -83,7 +79,7 @@ const isRecord = (value: unknown): value is Record<string, unknown> =>
 const isOptionalString = (value: unknown): boolean => value === undefined || typeof value === 'string';
 
 const hasSupportedVersion = (value: Record<string, unknown>): boolean =>
-  value['protocolVersion'] === undefined || value['protocolVersion'] === BUILDER_PROTOCOL_VERSION;
+  value['protocolVersion'] === BUILDER_PROTOCOL_VERSION;
 
 const hasConfig = (value: Record<string, unknown>): boolean => isRecord(value['config']);
 const hasDraftState = (value: Record<string, unknown>): boolean =>
@@ -113,7 +109,7 @@ export function isBuilderMessage(value: unknown): value is BuilderMessage {
     case builderEventTypes.publish:
       return hasConfig(value);
     case builderEventTypes.init:
-      return hasConfig(value) && (value['draftState'] === undefined || hasDraftState(value));
+      return hasConfig(value) && hasDraftState(value);
     case builderEventTypes.state:
       return hasDraftState(value);
     case builderEventTypes.scroll:
@@ -130,8 +126,8 @@ export function isBuilderMessage(value: unknown): value is BuilderMessage {
     case builderEventTypes.assetSelectSuccess:
       return typeof value['requestId'] === 'string'
         && typeof value['url'] === 'string'
-        && isOptionalString(value['key'])
-        && isOptionalString(value['contentType']);
+        && typeof value['key'] === 'string'
+        && typeof value['contentType'] === 'string';
     case builderEventTypes.assetSelectError:
       return typeof value['requestId'] === 'string' && typeof value['message'] === 'string';
   }
