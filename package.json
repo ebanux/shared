@@ -28,9 +28,12 @@
   },
   "scripts": {
     "build": "tsc -p tsconfig.json && tsc -p tsconfig.cjs.json",
+    "build:commerce": "npm run build --prefix packages/commerce-contract",
     "typecheck": "tsc -p tsconfig.json --noEmit",
+    "typecheck:commerce": "npm run typecheck --prefix packages/commerce-contract",
     "test": "npm run build && node --test test/*.test.mjs test/*.test.cjs",
-    "verify": "npm run typecheck && npm test && npm pack --dry-run"
+    "test:commerce": "npm test --prefix packages/commerce-contract",
+    "verify": "npm run typecheck && npm test && npm pack --dry-run && npm run verify --prefix packages/commerce-contract"
   },
   "devDependencies": {
     "typescript": "5.8.2"
