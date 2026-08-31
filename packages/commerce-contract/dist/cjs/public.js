@@ -1,6 +1,6 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.orderStatusSchema = exports.collectionDetailSchema = exports.catalogResponseSchema = exports.cartQuoteSchema = exports.quotedCartLineSchema = exports.quoteIssueSchema = exports.cartLineSchema = exports.storefrontStoreSchema = exports.collectionSummarySchema = exports.productDetailSchema = exports.catalogProductCardSchema = exports.productVariantSchema = exports.commerceBadgeSchema = exports.personalizationFieldSchema = exports.personalizationValuesSchema = exports.personalizationValueSchema = exports.availabilitySchema = void 0;
+exports.orderStatusSchema = exports.subscriptionPortalResultSchema = exports.checkoutSessionResultSchema = exports.collectionListResponseSchema = exports.collectionDetailSchema = exports.catalogResponseSchema = exports.cartQuoteSchema = exports.quotedCartLineSchema = exports.quoteIssueSchema = exports.cartLineSchema = exports.storefrontStoreSchema = exports.collectionSummarySchema = exports.productDetailSchema = exports.catalogProductCardSchema = exports.productVariantSchema = exports.commerceBadgeSchema = exports.personalizationFieldSchema = exports.personalizationValuesSchema = exports.personalizationValueSchema = exports.availabilitySchema = void 0;
 const zod_1 = require("zod");
 const pricing_js_1 = require("./pricing.js");
 exports.availabilitySchema = zod_1.z.enum(['in_stock', 'out_of_stock', 'preorder', 'unavailable']);
@@ -118,6 +118,14 @@ exports.quotedCartLineSchema = exports.cartLineSchema.extend({
     total: pricing_js_1.minorAmountSchema,
     pricing: pricing_js_1.priceDefinitionSchema,
     issues: zod_1.z.array(exports.quoteIssueSchema),
+    appliedDiscount: pricing_js_1.quantityDiscountSchema.optional(),
+    tierCalculation: zod_1.z.object({
+        mode: zod_1.z.enum(['graduated', 'volume']), quantity: zod_1.z.number().int().positive(), total: pricing_js_1.minorAmountSchema,
+    }).strict().optional(),
+    productionInstructions: zod_1.z.array(zod_1.z.object({
+        fieldId: zod_1.z.string(), label: zod_1.z.string(), type: zod_1.z.enum(['instruction', 'number', 'text']),
+        value: exports.personalizationValueSchema.optional(),
+    }).strict()).optional(),
 }).strict();
 exports.cartQuoteSchema = zod_1.z.object({
     storeSlug: zod_1.z.string().min(1),
@@ -146,6 +154,16 @@ exports.collectionDetailSchema = zod_1.z.object({
     total: zod_1.z.number().int().nonnegative(),
     nextCursor: zod_1.z.string().optional(),
 }).strict();
+exports.collectionListResponseSchema = zod_1.z.object({
+    store: exports.storefrontStoreSchema,
+    items: zod_1.z.array(exports.collectionSummarySchema),
+}).strict();
+exports.checkoutSessionResultSchema = zod_1.z.object({
+    checkoutUrl: zod_1.z.string().url(),
+    orderId: zod_1.z.string().min(1),
+    orderToken: zod_1.z.string().min(1),
+}).strict();
+exports.subscriptionPortalResultSchema = zod_1.z.object({ url: zod_1.z.string().url() }).strict();
 exports.orderStatusSchema = zod_1.z.object({
     orderId: zod_1.z.string().min(1),
     storeSlug: zod_1.z.string().min(1),

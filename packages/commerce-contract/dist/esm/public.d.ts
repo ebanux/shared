@@ -1047,6 +1047,45 @@ export declare const quotedCartLineSchema: z.ZodObject<{
         severity: "error" | "warning";
         fieldId?: string | undefined;
     }>, "many">;
+    appliedDiscount: z.ZodOptional<z.ZodObject<{
+        minimumQuantity: z.ZodNumber;
+        percentOff: z.ZodNumber;
+    }, "strict", z.ZodTypeAny, {
+        minimumQuantity: number;
+        percentOff: number;
+    }, {
+        minimumQuantity: number;
+        percentOff: number;
+    }>>;
+    tierCalculation: z.ZodOptional<z.ZodObject<{
+        mode: z.ZodEnum<["graduated", "volume"]>;
+        quantity: z.ZodNumber;
+        total: z.ZodNumber;
+    }, "strict", z.ZodTypeAny, {
+        total: number;
+        mode: "graduated" | "volume";
+        quantity: number;
+    }, {
+        total: number;
+        mode: "graduated" | "volume";
+        quantity: number;
+    }>>;
+    productionInstructions: z.ZodOptional<z.ZodArray<z.ZodObject<{
+        fieldId: z.ZodString;
+        label: z.ZodString;
+        type: z.ZodEnum<["instruction", "number", "text"]>;
+        value: z.ZodOptional<z.ZodUnion<[z.ZodString, z.ZodNumber]>>;
+    }, "strict", z.ZodTypeAny, {
+        type: "number" | "text" | "instruction";
+        label: string;
+        fieldId: string;
+        value?: string | number | undefined;
+    }, {
+        type: "number" | "text" | "instruction";
+        label: string;
+        fieldId: string;
+        value?: string | number | undefined;
+    }>, "many">>;
 }, "strict", z.ZodTypeAny, {
     total: number;
     shipping: number;
@@ -1095,6 +1134,21 @@ export declare const quotedCartLineSchema: z.ZodObject<{
     variantName?: string | undefined;
     priceId?: string | undefined;
     personalizationLabels?: Record<string, string> | undefined;
+    appliedDiscount?: {
+        minimumQuantity: number;
+        percentOff: number;
+    } | undefined;
+    tierCalculation?: {
+        total: number;
+        mode: "graduated" | "volume";
+        quantity: number;
+    } | undefined;
+    productionInstructions?: {
+        type: "number" | "text" | "instruction";
+        label: string;
+        fieldId: string;
+        value?: string | number | undefined;
+    }[] | undefined;
 }, {
     total: number;
     shipping: number;
@@ -1143,6 +1197,21 @@ export declare const quotedCartLineSchema: z.ZodObject<{
     variantName?: string | undefined;
     priceId?: string | undefined;
     personalizationLabels?: Record<string, string> | undefined;
+    appliedDiscount?: {
+        minimumQuantity: number;
+        percentOff: number;
+    } | undefined;
+    tierCalculation?: {
+        total: number;
+        mode: "graduated" | "volume";
+        quantity: number;
+    } | undefined;
+    productionInstructions?: {
+        type: "number" | "text" | "instruction";
+        label: string;
+        fieldId: string;
+        value?: string | number | undefined;
+    }[] | undefined;
 }>;
 export declare const cartQuoteSchema: z.ZodObject<{
     storeSlug: z.ZodString;
@@ -1256,6 +1325,45 @@ export declare const cartQuoteSchema: z.ZodObject<{
             severity: "error" | "warning";
             fieldId?: string | undefined;
         }>, "many">;
+        appliedDiscount: z.ZodOptional<z.ZodObject<{
+            minimumQuantity: z.ZodNumber;
+            percentOff: z.ZodNumber;
+        }, "strict", z.ZodTypeAny, {
+            minimumQuantity: number;
+            percentOff: number;
+        }, {
+            minimumQuantity: number;
+            percentOff: number;
+        }>>;
+        tierCalculation: z.ZodOptional<z.ZodObject<{
+            mode: z.ZodEnum<["graduated", "volume"]>;
+            quantity: z.ZodNumber;
+            total: z.ZodNumber;
+        }, "strict", z.ZodTypeAny, {
+            total: number;
+            mode: "graduated" | "volume";
+            quantity: number;
+        }, {
+            total: number;
+            mode: "graduated" | "volume";
+            quantity: number;
+        }>>;
+        productionInstructions: z.ZodOptional<z.ZodArray<z.ZodObject<{
+            fieldId: z.ZodString;
+            label: z.ZodString;
+            type: z.ZodEnum<["instruction", "number", "text"]>;
+            value: z.ZodOptional<z.ZodUnion<[z.ZodString, z.ZodNumber]>>;
+        }, "strict", z.ZodTypeAny, {
+            type: "number" | "text" | "instruction";
+            label: string;
+            fieldId: string;
+            value?: string | number | undefined;
+        }, {
+            type: "number" | "text" | "instruction";
+            label: string;
+            fieldId: string;
+            value?: string | number | undefined;
+        }>, "many">>;
     }, "strict", z.ZodTypeAny, {
         total: number;
         shipping: number;
@@ -1304,6 +1412,21 @@ export declare const cartQuoteSchema: z.ZodObject<{
         variantName?: string | undefined;
         priceId?: string | undefined;
         personalizationLabels?: Record<string, string> | undefined;
+        appliedDiscount?: {
+            minimumQuantity: number;
+            percentOff: number;
+        } | undefined;
+        tierCalculation?: {
+            total: number;
+            mode: "graduated" | "volume";
+            quantity: number;
+        } | undefined;
+        productionInstructions?: {
+            type: "number" | "text" | "instruction";
+            label: string;
+            fieldId: string;
+            value?: string | number | undefined;
+        }[] | undefined;
     }, {
         total: number;
         shipping: number;
@@ -1352,6 +1475,21 @@ export declare const cartQuoteSchema: z.ZodObject<{
         variantName?: string | undefined;
         priceId?: string | undefined;
         personalizationLabels?: Record<string, string> | undefined;
+        appliedDiscount?: {
+            minimumQuantity: number;
+            percentOff: number;
+        } | undefined;
+        tierCalculation?: {
+            total: number;
+            mode: "graduated" | "volume";
+            quantity: number;
+        } | undefined;
+        productionInstructions?: {
+            type: "number" | "text" | "instruction";
+            label: string;
+            fieldId: string;
+            value?: string | number | undefined;
+        }[] | undefined;
     }>, "many">;
     subtotal: z.ZodNumber;
     automaticDiscount: z.ZodNumber;
@@ -1416,6 +1554,21 @@ export declare const cartQuoteSchema: z.ZodObject<{
         variantName?: string | undefined;
         priceId?: string | undefined;
         personalizationLabels?: Record<string, string> | undefined;
+        appliedDiscount?: {
+            minimumQuantity: number;
+            percentOff: number;
+        } | undefined;
+        tierCalculation?: {
+            total: number;
+            mode: "graduated" | "volume";
+            quantity: number;
+        } | undefined;
+        productionInstructions?: {
+            type: "number" | "text" | "instruction";
+            label: string;
+            fieldId: string;
+            value?: string | number | undefined;
+        }[] | undefined;
     }[];
     automaticDiscount: number;
     promotionCodeEligible: boolean;
@@ -1476,6 +1629,21 @@ export declare const cartQuoteSchema: z.ZodObject<{
         variantName?: string | undefined;
         priceId?: string | undefined;
         personalizationLabels?: Record<string, string> | undefined;
+        appliedDiscount?: {
+            minimumQuantity: number;
+            percentOff: number;
+        } | undefined;
+        tierCalculation?: {
+            total: number;
+            mode: "graduated" | "volume";
+            quantity: number;
+        } | undefined;
+        productionInstructions?: {
+            type: "number" | "text" | "instruction";
+            label: string;
+            fieldId: string;
+            value?: string | number | undefined;
+        }[] | undefined;
     }[];
     automaticDiscount: number;
     promotionCodeEligible: boolean;
@@ -2466,6 +2634,273 @@ export declare const collectionDetailSchema: z.ZodObject<{
     };
     nextCursor?: string | undefined;
 }>;
+export declare const collectionListResponseSchema: z.ZodObject<{
+    store: z.ZodObject<{
+        slug: z.ZodString;
+        displayName: z.ZodString;
+        description: z.ZodOptional<z.ZodString>;
+        logo: z.ZodOptional<z.ZodString>;
+        currency: z.ZodString;
+        allowedShippingCountries: z.ZodArray<z.ZodString, "many">;
+        presentation: z.ZodOptional<z.ZodRecord<z.ZodString, z.ZodUnknown>>;
+        presentationVersion: z.ZodOptional<z.ZodNumber>;
+        presentationUpdatedAt: z.ZodOptional<z.ZodNumber>;
+        navigationCollections: z.ZodOptional<z.ZodArray<z.ZodObject<Pick<{
+            id: z.ZodString;
+            slug: z.ZodString;
+            title: z.ZodString;
+            description: z.ZodString;
+            coverImage: z.ZodOptional<z.ZodString>;
+            seo: z.ZodOptional<z.ZodObject<{
+                title: z.ZodOptional<z.ZodString>;
+                description: z.ZodOptional<z.ZodString>;
+            }, "strict", z.ZodTypeAny, {
+                title?: string | undefined;
+                description?: string | undefined;
+            }, {
+                title?: string | undefined;
+                description?: string | undefined;
+            }>>;
+            showInNavigation: z.ZodBoolean;
+            sortOrder: z.ZodNumber;
+        }, "id" | "title" | "slug">, "strict", z.ZodTypeAny, {
+            id: string;
+            title: string;
+            slug: string;
+        }, {
+            id: string;
+            title: string;
+            slug: string;
+        }>, "many">>;
+        checkoutSettings: z.ZodOptional<z.ZodObject<{
+            billingAddressCollection: z.ZodEnum<["auto", "required"]>;
+            terms: z.ZodOptional<z.ZodObject<{
+                label: z.ZodString;
+                url: z.ZodString;
+            }, "strict", z.ZodTypeAny, {
+                url: string;
+                label: string;
+            }, {
+                url: string;
+                label: string;
+            }>>;
+            confirmationMessage: z.ZodOptional<z.ZodString>;
+            supportEmail: z.ZodOptional<z.ZodString>;
+            supportUrl: z.ZodOptional<z.ZodString>;
+        }, "strict", z.ZodTypeAny, {
+            billingAddressCollection: "required" | "auto";
+            terms?: {
+                url: string;
+                label: string;
+            } | undefined;
+            confirmationMessage?: string | undefined;
+            supportEmail?: string | undefined;
+            supportUrl?: string | undefined;
+        }, {
+            billingAddressCollection: "required" | "auto";
+            terms?: {
+                url: string;
+                label: string;
+            } | undefined;
+            confirmationMessage?: string | undefined;
+            supportEmail?: string | undefined;
+            supportUrl?: string | undefined;
+        }>>;
+    }, "strict", z.ZodTypeAny, {
+        currency: string;
+        slug: string;
+        displayName: string;
+        allowedShippingCountries: string[];
+        description?: string | undefined;
+        logo?: string | undefined;
+        presentation?: Record<string, unknown> | undefined;
+        presentationVersion?: number | undefined;
+        presentationUpdatedAt?: number | undefined;
+        navigationCollections?: {
+            id: string;
+            title: string;
+            slug: string;
+        }[] | undefined;
+        checkoutSettings?: {
+            billingAddressCollection: "required" | "auto";
+            terms?: {
+                url: string;
+                label: string;
+            } | undefined;
+            confirmationMessage?: string | undefined;
+            supportEmail?: string | undefined;
+            supportUrl?: string | undefined;
+        } | undefined;
+    }, {
+        currency: string;
+        slug: string;
+        displayName: string;
+        allowedShippingCountries: string[];
+        description?: string | undefined;
+        logo?: string | undefined;
+        presentation?: Record<string, unknown> | undefined;
+        presentationVersion?: number | undefined;
+        presentationUpdatedAt?: number | undefined;
+        navigationCollections?: {
+            id: string;
+            title: string;
+            slug: string;
+        }[] | undefined;
+        checkoutSettings?: {
+            billingAddressCollection: "required" | "auto";
+            terms?: {
+                url: string;
+                label: string;
+            } | undefined;
+            confirmationMessage?: string | undefined;
+            supportEmail?: string | undefined;
+            supportUrl?: string | undefined;
+        } | undefined;
+    }>;
+    items: z.ZodArray<z.ZodObject<{
+        id: z.ZodString;
+        slug: z.ZodString;
+        title: z.ZodString;
+        description: z.ZodString;
+        coverImage: z.ZodOptional<z.ZodString>;
+        seo: z.ZodOptional<z.ZodObject<{
+            title: z.ZodOptional<z.ZodString>;
+            description: z.ZodOptional<z.ZodString>;
+        }, "strict", z.ZodTypeAny, {
+            title?: string | undefined;
+            description?: string | undefined;
+        }, {
+            title?: string | undefined;
+            description?: string | undefined;
+        }>>;
+        showInNavigation: z.ZodBoolean;
+        sortOrder: z.ZodNumber;
+    }, "strict", z.ZodTypeAny, {
+        id: string;
+        title: string;
+        description: string;
+        slug: string;
+        showInNavigation: boolean;
+        sortOrder: number;
+        seo?: {
+            title?: string | undefined;
+            description?: string | undefined;
+        } | undefined;
+        coverImage?: string | undefined;
+    }, {
+        id: string;
+        title: string;
+        description: string;
+        slug: string;
+        showInNavigation: boolean;
+        sortOrder: number;
+        seo?: {
+            title?: string | undefined;
+            description?: string | undefined;
+        } | undefined;
+        coverImage?: string | undefined;
+    }>, "many">;
+}, "strict", z.ZodTypeAny, {
+    items: {
+        id: string;
+        title: string;
+        description: string;
+        slug: string;
+        showInNavigation: boolean;
+        sortOrder: number;
+        seo?: {
+            title?: string | undefined;
+            description?: string | undefined;
+        } | undefined;
+        coverImage?: string | undefined;
+    }[];
+    store: {
+        currency: string;
+        slug: string;
+        displayName: string;
+        allowedShippingCountries: string[];
+        description?: string | undefined;
+        logo?: string | undefined;
+        presentation?: Record<string, unknown> | undefined;
+        presentationVersion?: number | undefined;
+        presentationUpdatedAt?: number | undefined;
+        navigationCollections?: {
+            id: string;
+            title: string;
+            slug: string;
+        }[] | undefined;
+        checkoutSettings?: {
+            billingAddressCollection: "required" | "auto";
+            terms?: {
+                url: string;
+                label: string;
+            } | undefined;
+            confirmationMessage?: string | undefined;
+            supportEmail?: string | undefined;
+            supportUrl?: string | undefined;
+        } | undefined;
+    };
+}, {
+    items: {
+        id: string;
+        title: string;
+        description: string;
+        slug: string;
+        showInNavigation: boolean;
+        sortOrder: number;
+        seo?: {
+            title?: string | undefined;
+            description?: string | undefined;
+        } | undefined;
+        coverImage?: string | undefined;
+    }[];
+    store: {
+        currency: string;
+        slug: string;
+        displayName: string;
+        allowedShippingCountries: string[];
+        description?: string | undefined;
+        logo?: string | undefined;
+        presentation?: Record<string, unknown> | undefined;
+        presentationVersion?: number | undefined;
+        presentationUpdatedAt?: number | undefined;
+        navigationCollections?: {
+            id: string;
+            title: string;
+            slug: string;
+        }[] | undefined;
+        checkoutSettings?: {
+            billingAddressCollection: "required" | "auto";
+            terms?: {
+                url: string;
+                label: string;
+            } | undefined;
+            confirmationMessage?: string | undefined;
+            supportEmail?: string | undefined;
+            supportUrl?: string | undefined;
+        } | undefined;
+    };
+}>;
+export declare const checkoutSessionResultSchema: z.ZodObject<{
+    checkoutUrl: z.ZodString;
+    orderId: z.ZodString;
+    orderToken: z.ZodString;
+}, "strict", z.ZodTypeAny, {
+    checkoutUrl: string;
+    orderId: string;
+    orderToken: string;
+}, {
+    checkoutUrl: string;
+    orderId: string;
+    orderToken: string;
+}>;
+export declare const subscriptionPortalResultSchema: z.ZodObject<{
+    url: z.ZodString;
+}, "strict", z.ZodTypeAny, {
+    url: string;
+}, {
+    url: string;
+}>;
 export declare const orderStatusSchema: z.ZodObject<{
     orderId: z.ZodString;
     storeSlug: z.ZodString;
@@ -2637,9 +3072,12 @@ export type CartQuote = z.infer<typeof cartQuoteSchema>;
 export type CatalogProductCard = z.infer<typeof catalogProductCardSchema>;
 export type CatalogResponse = z.infer<typeof catalogResponseSchema>;
 export type CollectionDetail = z.infer<typeof collectionDetailSchema>;
+export type CollectionListResponse = z.infer<typeof collectionListResponseSchema>;
 export type CollectionSummary = z.infer<typeof collectionSummarySchema>;
 export type CommerceBadge = z.infer<typeof commerceBadgeSchema>;
 export type OrderStatus = z.infer<typeof orderStatusSchema>;
 export type ProductDetail = z.infer<typeof productDetailSchema>;
+export type CheckoutSessionResult = z.infer<typeof checkoutSessionResultSchema>;
+export type SubscriptionPortalResult = z.infer<typeof subscriptionPortalResultSchema>;
 export type StorefrontStore = z.infer<typeof storefrontStoreSchema>;
 //# sourceMappingURL=public.d.ts.map

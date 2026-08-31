@@ -96,6 +96,29 @@ export declare const catalogQuerySchema: z.ZodObject<{
     tag?: string | undefined;
     limit?: number | undefined;
 }>;
+export declare const commerceUrlStateSchema: z.ZodObject<{
+    q: z.ZodOptional<z.ZodString>;
+    tag: z.ZodOptional<z.ZodString>;
+    sort: z.ZodDefault<z.ZodEnum<["featured", "price-asc", "price-desc", "title-asc", "title-desc"]>>;
+    cursor: z.ZodOptional<z.ZodString>;
+    limit: z.ZodDefault<z.ZodNumber>;
+} & {
+    variant: z.ZodOptional<z.ZodString>;
+}, "strict", z.ZodTypeAny, {
+    sort: "featured" | "price-asc" | "price-desc" | "title-asc" | "title-desc";
+    limit: number;
+    variant?: string | undefined;
+    cursor?: string | undefined;
+    q?: string | undefined;
+    tag?: string | undefined;
+}, {
+    sort?: "featured" | "price-asc" | "price-desc" | "title-asc" | "title-desc" | undefined;
+    variant?: string | undefined;
+    cursor?: string | undefined;
+    q?: string | undefined;
+    tag?: string | undefined;
+    limit?: number | undefined;
+}>;
 export declare const cartQuoteRequestSchema: z.ZodObject<{
     storeSlug: z.ZodString;
     lines: z.ZodArray<z.ZodObject<{
@@ -199,8 +222,11 @@ export type CommerceApiFailure = z.infer<typeof commerceApiFailureSchema>;
 export type CommerceErrorCode = z.infer<typeof commerceErrorCodeSchema>;
 export type CatalogQuery = z.infer<typeof catalogQuerySchema>;
 export type CatalogSort = z.infer<typeof catalogSortSchema>;
+export type CommerceUrlState = z.infer<typeof commerceUrlStateSchema>;
 export type CartQuoteRequest = z.infer<typeof cartQuoteRequestSchema>;
 export type CheckoutRequest = z.infer<typeof checkoutRequestSchema>;
 export declare function parseCatalogQuery(params: URLSearchParams): CatalogQuery;
 export declare function encodeCatalogQuery(input: Partial<CatalogQuery>): URLSearchParams;
+export declare function parseCommerceUrlState(params: URLSearchParams): CommerceUrlState;
+export declare function encodeCommerceUrlState(input: Partial<CommerceUrlState>): URLSearchParams;
 //# sourceMappingURL=api.d.ts.map

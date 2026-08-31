@@ -1,8 +1,10 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.checkoutRequestSchema = exports.cartQuoteRequestSchema = exports.catalogQuerySchema = exports.catalogSortSchema = exports.commerceApiSuccessSchema = exports.commerceApiFailureSchema = exports.commerceApiErrorSchema = exports.commerceErrorCodeSchema = exports.COMMERCE_CONTRACT_VERSION = void 0;
+exports.checkoutRequestSchema = exports.cartQuoteRequestSchema = exports.commerceUrlStateSchema = exports.catalogQuerySchema = exports.catalogSortSchema = exports.commerceApiSuccessSchema = exports.commerceApiFailureSchema = exports.commerceApiErrorSchema = exports.commerceErrorCodeSchema = exports.COMMERCE_CONTRACT_VERSION = void 0;
 exports.parseCatalogQuery = parseCatalogQuery;
 exports.encodeCatalogQuery = encodeCatalogQuery;
+exports.parseCommerceUrlState = parseCommerceUrlState;
+exports.encodeCommerceUrlState = encodeCommerceUrlState;
 const zod_1 = require("zod");
 const public_js_1 = require("./public.js");
 exports.COMMERCE_CONTRACT_VERSION = 1;
@@ -47,6 +49,9 @@ exports.catalogQuerySchema = zod_1.z.object({
     cursor: zod_1.z.string().max(500).optional(),
     limit: zod_1.z.number().int().min(1).max(100).default(24),
 }).strict();
+exports.commerceUrlStateSchema = exports.catalogQuerySchema.extend({
+    variant: zod_1.z.string().max(200).optional(),
+}).strict();
 exports.cartQuoteRequestSchema = zod_1.z.object({
     storeSlug: zod_1.z.string().min(1),
     lines: zod_1.z.array(public_js_1.cartLineSchema).min(1).max(100),
@@ -80,6 +85,20 @@ function encodeCatalogQuery(input) {
         params.set('cursor', query.cursor);
     if (query.limit !== 24)
         params.set('limit', String(query.limit));
+    return params;
+}
+function parseCommerceUrlState(params) {
+    return exports.commerceUrlStateSchema.parse({
+        ...parseCatalogQuery(params),
+        ...(params.get('variant') ? { variant: params.get('variant') } : {}),
+    });
+}
+function encodeCommerceUrlState(input) {
+    const state = exports.commerceUrlStateSchema.parse(input);
+    const { variant, ...catalog } = state;
+    const params = encodeCatalogQuery(catalog);
+    if (variant)
+        params.set('variant', variant);
     return params;
 }
 //# sourceMappingURL=api.js.map

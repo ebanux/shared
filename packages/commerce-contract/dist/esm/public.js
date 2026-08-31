@@ -115,6 +115,14 @@ export const quotedCartLineSchema = cartLineSchema.extend({
     total: minorAmountSchema,
     pricing: priceDefinitionSchema,
     issues: z.array(quoteIssueSchema),
+    appliedDiscount: quantityDiscountSchema.optional(),
+    tierCalculation: z.object({
+        mode: z.enum(['graduated', 'volume']), quantity: z.number().int().positive(), total: minorAmountSchema,
+    }).strict().optional(),
+    productionInstructions: z.array(z.object({
+        fieldId: z.string(), label: z.string(), type: z.enum(['instruction', 'number', 'text']),
+        value: personalizationValueSchema.optional(),
+    }).strict()).optional(),
 }).strict();
 export const cartQuoteSchema = z.object({
     storeSlug: z.string().min(1),
@@ -143,6 +151,16 @@ export const collectionDetailSchema = z.object({
     total: z.number().int().nonnegative(),
     nextCursor: z.string().optional(),
 }).strict();
+export const collectionListResponseSchema = z.object({
+    store: storefrontStoreSchema,
+    items: z.array(collectionSummarySchema),
+}).strict();
+export const checkoutSessionResultSchema = z.object({
+    checkoutUrl: z.string().url(),
+    orderId: z.string().min(1),
+    orderToken: z.string().min(1),
+}).strict();
+export const subscriptionPortalResultSchema = z.object({ url: z.string().url() }).strict();
 export const orderStatusSchema = z.object({
     orderId: z.string().min(1),
     storeSlug: z.string().min(1),

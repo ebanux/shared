@@ -41,6 +41,9 @@ export const catalogQuerySchema = z.object({
     cursor: z.string().max(500).optional(),
     limit: z.number().int().min(1).max(100).default(24),
 }).strict();
+export const commerceUrlStateSchema = catalogQuerySchema.extend({
+    variant: z.string().max(200).optional(),
+}).strict();
 export const cartQuoteRequestSchema = z.object({
     storeSlug: z.string().min(1),
     lines: z.array(cartLineSchema).min(1).max(100),
@@ -74,6 +77,20 @@ export function encodeCatalogQuery(input) {
         params.set('cursor', query.cursor);
     if (query.limit !== 24)
         params.set('limit', String(query.limit));
+    return params;
+}
+export function parseCommerceUrlState(params) {
+    return commerceUrlStateSchema.parse({
+        ...parseCatalogQuery(params),
+        ...(params.get('variant') ? { variant: params.get('variant') } : {}),
+    });
+}
+export function encodeCommerceUrlState(input) {
+    const state = commerceUrlStateSchema.parse(input);
+    const { variant, ...catalog } = state;
+    const params = encodeCatalogQuery(catalog);
+    if (variant)
+        params.set('variant', variant);
     return params;
 }
 //# sourceMappingURL=api.js.map

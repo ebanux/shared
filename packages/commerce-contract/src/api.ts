@@ -48,6 +48,9 @@ export const catalogQuerySchema = z.object({
   cursor: z.string().max(500).optional(),
   limit: z.number().int().min(1).max(100).default(24),
 }).strict();
+export const commerceUrlStateSchema = catalogQuerySchema.extend({
+  variant: z.string().max(200).optional(),
+}).strict();
 
 export const cartQuoteRequestSchema = z.object({
   storeSlug: z.string().min(1),
@@ -72,6 +75,7 @@ export type CommerceApiFailure = z.infer<typeof commerceApiFailureSchema>;
 export type CommerceErrorCode = z.infer<typeof commerceErrorCodeSchema>;
 export type CatalogQuery = z.infer<typeof catalogQuerySchema>;
 export type CatalogSort = z.infer<typeof catalogSortSchema>;
+export type CommerceUrlState = z.infer<typeof commerceUrlStateSchema>;
 export type CartQuoteRequest = z.infer<typeof cartQuoteRequestSchema>;
 export type CheckoutRequest = z.infer<typeof checkoutRequestSchema>;
 
@@ -94,5 +98,20 @@ export function encodeCatalogQuery(input: Partial<CatalogQuery>): URLSearchParam
   if (query.sort !== 'featured') params.set('sort', query.sort);
   if (query.cursor) params.set('cursor', query.cursor);
   if (query.limit !== 24) params.set('limit', String(query.limit));
+  return params;
+}
+
+export function parseCommerceUrlState(params: URLSearchParams): CommerceUrlState {
+  return commerceUrlStateSchema.parse({
+    ...parseCatalogQuery(params),
+    ...(params.get('variant') ? { variant: params.get('variant') } : {}),
+  });
+}
+
+export function encodeCommerceUrlState(input: Partial<CommerceUrlState>): URLSearchParams {
+  const state = commerceUrlStateSchema.parse(input);
+  const { variant, ...catalog } = state;
+  const params = encodeCatalogQuery(catalog);
+  if (variant) params.set('variant', variant);
   return params;
 }
