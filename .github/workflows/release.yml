@@ -31,21 +31,44 @@ jobs:
       - name: Verify release contents
         run: |
           npm run verify
-          git diff --exit-code -- dist
-      - name: Determine release tag
-        id: release
+          git diff --exit-code -- dist packages/commerce-contract/dist
+      - name: Package commerce contract
         run: |
-          version="$(node --print "require('./package.json').version")"
-          tag="v${version}"
-
-          if git show-ref --tags --verify --quiet "refs/tags/${tag}"; then
-            echo "::error::${tag} already exists. Bump the package version before merging develop into master."
-            exit 1
-          fi
-
-          echo "tag=${tag}" >> "$GITHUB_OUTPUT"
-      - name: Create GitHub release
+          mkdir -p release-artifacts
+          npm pack ./packages/commerce-contract --pack-destination release-artifacts
+      - name: Create missing package releases
         env:
           GH_TOKEN: ${{ github.token }}
-          RELEASE_TAG: ${{ steps.release.outputs.tag }}
-        run: gh release create "$RELEASE_TAG" --target "$GITHUB_SHA" --title "$RELEASE_TAG" --generate-notes
+        run: |
+          create_release() {
+            local tag="$1"
+            local title="$2"
+            local asset="${3:-}"
+
+            if gh release view "$tag" >/dev/null 2>&1; then
+              echo "${tag} already has a release; skipping."
+              return
+            fi
+
+            local target_args=()
+            if ! git show-ref --tags --verify --quiet "refs/tags/${tag}"; then
+              target_args=(--target "$GITHUB_SHA")
+            fi
+
+            local asset_args=()
+            if [ -n "$asset" ]; then
+              asset_args=("$asset")
+            fi
+
+            gh release create "$tag" "${asset_args[@]}" "${target_args[@]}" \
+              --title "$title" --generate-notes
+          }
+
+          builder_version="$(node --print "require('./package.json').version")"
+          commerce_version="$(node --print "require('./packages/commerce-contract/package.json').version")"
+          commerce_asset="release-artifacts/ebanux-commerce-contract-${commerce_version}.tgz"
+          test -f "$commerce_asset"
+
+          create_release "v${builder_version}" "Builder Contract v${builder_version}"
+          create_release "commerce-contract-v${commerce_version}" \
+            "Commerce Contract v${commerce_version}" "$commerce_asset"
