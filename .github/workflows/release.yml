@@ -31,11 +31,12 @@ jobs:
       - name: Verify release contents
         run: |
           npm run verify
-          git diff --exit-code -- dist packages/commerce-contract/dist
-      - name: Package commerce contract
+          git diff --exit-code -- dist packages/commerce-contract/dist packages/inventory-contract/dist
+      - name: Package domain contracts
         run: |
           mkdir -p release-artifacts
           npm pack ./packages/commerce-contract --pack-destination release-artifacts
+          npm pack ./packages/inventory-contract --pack-destination release-artifacts
       - name: Create missing package releases
         env:
           GH_TOKEN: ${{ github.token }}
@@ -66,9 +67,14 @@ jobs:
 
           builder_version="$(node --print "require('./package.json').version")"
           commerce_version="$(node --print "require('./packages/commerce-contract/package.json').version")"
+          inventory_version="$(node --print "require('./packages/inventory-contract/package.json').version")"
           commerce_asset="release-artifacts/ebanux-commerce-contract-${commerce_version}.tgz"
+          inventory_asset="release-artifacts/ebanux-inventory-contract-${inventory_version}.tgz"
           test -f "$commerce_asset"
+          test -f "$inventory_asset"
 
           create_release "v${builder_version}" "Builder Contract v${builder_version}"
           create_release "commerce-contract-v${commerce_version}" \
             "Commerce Contract v${commerce_version}" "$commerce_asset"
+          create_release "inventory-contract-v${inventory_version}" \
+            "Inventory Contract v${inventory_version}" "$inventory_asset"

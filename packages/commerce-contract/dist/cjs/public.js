@@ -1,9 +1,10 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.orderStatusSchema = exports.subscriptionPortalResultSchema = exports.checkoutSessionResultSchema = exports.collectionListResponseSchema = exports.collectionDetailSchema = exports.catalogResponseSchema = exports.cartQuoteSchema = exports.quotedCartLineSchema = exports.quoteIssueSchema = exports.cartLineSchema = exports.storefrontStoreSchema = exports.collectionSummarySchema = exports.productDetailSchema = exports.catalogProductCardSchema = exports.productVariantSchema = exports.commerceBadgeSchema = exports.personalizationFieldSchema = exports.personalizationValuesSchema = exports.personalizationValueSchema = exports.availabilitySchema = void 0;
+exports.orderStatusSchema = exports.subscriptionPortalResultSchema = exports.checkoutSessionResultSchema = exports.collectionListResponseSchema = exports.collectionDetailSchema = exports.catalogResponseSchema = exports.cartQuoteSchema = exports.quotedCartLineSchema = exports.quoteIssueSchema = exports.cartLineSchema = exports.storefrontStoreSchema = exports.collectionSummarySchema = exports.productDetailSchema = exports.catalogProductCardSchema = exports.productVariantSchema = exports.commerceBadgeSchema = exports.personalizationFieldSchema = exports.personalizationValuesSchema = exports.personalizationValueSchema = exports.stockStatusSchema = exports.availabilitySchema = void 0;
 const zod_1 = require("zod");
 const pricing_js_1 = require("./pricing.js");
 exports.availabilitySchema = zod_1.z.enum(['in_stock', 'out_of_stock', 'preorder', 'unavailable']);
+exports.stockStatusSchema = zod_1.z.enum(['untracked', 'in_stock', 'low_stock', 'out_of_stock']);
 exports.personalizationValueSchema = zod_1.z.union([zod_1.z.string(), zod_1.z.number().finite()]);
 exports.personalizationValuesSchema = zod_1.z.record(exports.personalizationValueSchema);
 exports.personalizationFieldSchema = zod_1.z.object({
@@ -24,6 +25,7 @@ exports.productVariantSchema = zod_1.z.object({
     sku: zod_1.z.string().optional(),
     image: zod_1.z.string().url().optional(),
     availability: exports.availabilitySchema,
+    stockStatus: exports.stockStatusSchema.optional(),
     quantityDiscounts: zod_1.z.array(pricing_js_1.quantityDiscountSchema),
     price: pricing_js_1.priceDefinitionSchema,
     currency: pricing_js_1.currencyCodeSchema,
@@ -38,6 +40,7 @@ exports.catalogProductCardSchema = zod_1.z.object({
     image: zod_1.z.string().url().optional(),
     tags: zod_1.z.array(zod_1.z.string()),
     availability: exports.availabilitySchema,
+    stockStatus: exports.stockStatusSchema.optional(),
     badges: zod_1.z.array(exports.commerceBadgeSchema).max(3),
     defaultVariantId: zod_1.z.string().optional(),
     pricing: pricing_js_1.pricingSummarySchema.nullable(),
@@ -108,6 +111,7 @@ exports.quotedCartLineSchema = exports.cartLineSchema.extend({
     productCode: zod_1.z.string().optional(),
     variantName: zod_1.z.string().optional(),
     sku: zod_1.z.string().optional(),
+    stockStatus: exports.stockStatusSchema.optional(),
     unitAmount: pricing_js_1.minorAmountSchema.optional(),
     currency: pricing_js_1.currencyCodeSchema.optional(),
     priceId: zod_1.z.string().optional(),

@@ -15,6 +15,9 @@ export const commerceErrorCodeSchema = z.enum([
     'PROMOTION_CODE_INVALID',
     'PAYMENT_ACCOUNT_UNAVAILABLE',
     'SUBSCRIPTION_CART_INVALID',
+    'INSUFFICIENT_STOCK',
+    'INVENTORY_UNAVAILABLE',
+    'RESERVATION_EXPIRED',
     'INTERNAL_ERROR',
 ]);
 export const commerceApiErrorSchema = z.object({

@@ -1,6 +1,12 @@
-# QRLynk builder contract
+# A-Tap shared contracts
 
-`@ebanux/builder-contract` is the framework-neutral wire contract between a QRLynk builder host and a builder runtime.
+This repository publishes independently versioned, framework-neutral contracts for A-Tap applications:
+
+- `@ebanux/builder-contract` for builder host/runtime messages.
+- `@ebanux/commerce-contract` for commerce API requests and projections.
+- `@ebanux/inventory-contract` for inventory API requests and projections.
+
+The builder contract owns:
 
 It owns:
 
@@ -36,9 +42,9 @@ Release commits include the built `dist` artifacts, so consumers do not compile 
 
 ## Releases
 
-Before promoting `develop` to `master`, update the version in `package.json` and `package-lock.json`. Merging that pull request runs the release workflow, which creates the matching immutable SemVer tag and GitHub Release directly from the merge commit. No automated release pull request or approval is involved.
+Before promoting `develop` to `master`, update the version and lockfile for every package whose published contents changed. Merging that pull request runs the release workflow, which creates any missing immutable package tags and GitHub Releases directly from the merge commit. No automated release pull request or approval is involved.
 
-The release workflow verifies the package and rejects a release when the tracked `dist` artifacts do not match the TypeScript source or when the version tag already exists. After a release, consumers update their public GitHub tarball dependency to the new tag.
+The release workflow verifies every package and rejects a release when tracked `dist` artifacts do not match the TypeScript source. Existing unchanged package releases are skipped, so independently versioned packages do not need artificial version bumps. After a release, consumers update their public GitHub asset dependency to the new package tag.
 
 ## Version 1 contract
 

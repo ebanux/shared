@@ -1,0 +1,17 @@
+{
+  "compilerOptions": {
+    "declaration": true,
+    "declarationMap": true,
+    "exactOptionalPropertyTypes": true,
+    "forceConsistentCasingInFileNames": true,
+    "module": "NodeNext",
+    "moduleResolution": "NodeNext",
+    "noUncheckedIndexedAccess": true,
+    "outDir": "dist/esm",
+    "rootDir": "src",
+    "sourceMap": true,
+    "strict": true,
+    "target": "ES2022"
+  },
+  "include": ["src/**/*.ts"]
+}

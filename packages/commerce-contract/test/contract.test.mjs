@@ -35,6 +35,12 @@ test('requires the current contract version and structured errors', () => {
     type: 'commerce_error',
     error: { code: 'PRICE_CHANGED', message: 'Price changed.', retryable: true },
   }).success, false);
+  for (const code of ['INSUFFICIENT_STOCK', 'INVENTORY_UNAVAILABLE', 'RESERVATION_EXPIRED']) {
+    assert.equal(commerceApiFailureSchema.safeParse({
+      contractVersion: COMMERCE_CONTRACT_VERSION, type: 'commerce_error',
+      error: { code, message: 'Inventory state changed.', retryable: false },
+    }).success, true);
+  }
 });
 
 test('normalizes catalog URL state', () => {
@@ -74,4 +80,14 @@ test('validates checkout results and advanced quote details', () => {
       tierCalculation: { mode: 'volume', quantity: 2, total: 1000 },
     }],
   }).success, true);
+  assert.equal(cartQuoteSchema.safeParse({
+    storeSlug: 'qrlynk', currency: 'USD', subtotal: 1000, automaticDiscount: 0,
+    shipping: 0, total: 1000, promotionCodeEligible: false, recurring: false,
+    requiresShippingAddress: false, quotedAt: '2026-08-30T12:00:00.000Z',
+    lines: [{
+      clientLineId: 'line-1', variantId: 'variant-1', quantity: 1, personalization: {}, stockStatus: 'low_stock',
+      availableToSell: 2, subtotal: 1000, discount: 0, shipping: 0, total: 1000, issues: [],
+      pricing: { model: 'fixed', amount: 1000 },
+    }],
+  }).success, false);
 });

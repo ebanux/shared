@@ -22,6 +22,9 @@ exports.commerceErrorCodeSchema = zod_1.z.enum([
     'PROMOTION_CODE_INVALID',
     'PAYMENT_ACCOUNT_UNAVAILABLE',
     'SUBSCRIPTION_CART_INVALID',
+    'INSUFFICIENT_STOCK',
+    'INVENTORY_UNAVAILABLE',
+    'RESERVATION_EXPIRED',
     'INTERNAL_ERROR',
 ]);
 exports.commerceApiErrorSchema = zod_1.z.object({

@@ -9,6 +9,7 @@ import {
 } from './pricing.js';
 
 export const availabilitySchema = z.enum(['in_stock', 'out_of_stock', 'preorder', 'unavailable']);
+export const stockStatusSchema = z.enum(['untracked', 'in_stock', 'low_stock', 'out_of_stock']);
 export const personalizationValueSchema = z.union([z.string(), z.number().finite()]);
 export const personalizationValuesSchema = z.record(personalizationValueSchema);
 export const personalizationFieldSchema = z.object({
@@ -31,6 +32,7 @@ export const productVariantSchema = z.object({
   sku: z.string().optional(),
   image: z.string().url().optional(),
   availability: availabilitySchema,
+  stockStatus: stockStatusSchema.optional(),
   quantityDiscounts: z.array(quantityDiscountSchema),
   price: priceDefinitionSchema,
   currency: currencyCodeSchema,
@@ -46,6 +48,7 @@ export const catalogProductCardSchema = z.object({
   image: z.string().url().optional(),
   tags: z.array(z.string()),
   availability: availabilitySchema,
+  stockStatus: stockStatusSchema.optional(),
   badges: z.array(commerceBadgeSchema).max(3),
   defaultVariantId: z.string().optional(),
   pricing: pricingSummarySchema.nullable(),
@@ -123,6 +126,7 @@ export const quotedCartLineSchema = cartLineSchema.extend({
   productCode: z.string().optional(),
   variantName: z.string().optional(),
   sku: z.string().optional(),
+  stockStatus: stockStatusSchema.optional(),
   unitAmount: minorAmountSchema.optional(),
   currency: currencyCodeSchema.optional(),
   priceId: z.string().optional(),
@@ -226,3 +230,4 @@ export type ProductDetail = z.infer<typeof productDetailSchema>;
 export type CheckoutSessionResult = z.infer<typeof checkoutSessionResultSchema>;
 export type SubscriptionPortalResult = z.infer<typeof subscriptionPortalResultSchema>;
 export type StorefrontStore = z.infer<typeof storefrontStoreSchema>;
+export type StockStatus = z.infer<typeof stockStatusSchema>;

@@ -1,5 +1,6 @@
 import { z } from 'zod';
 export declare const availabilitySchema: z.ZodEnum<["in_stock", "out_of_stock", "preorder", "unavailable"]>;
+export declare const stockStatusSchema: z.ZodEnum<["untracked", "in_stock", "low_stock", "out_of_stock"]>;
 export declare const personalizationValueSchema: z.ZodUnion<[z.ZodString, z.ZodNumber]>;
 export declare const personalizationValuesSchema: z.ZodRecord<z.ZodString, z.ZodUnion<[z.ZodString, z.ZodNumber]>>;
 export declare const personalizationFieldSchema: z.ZodObject<{
@@ -40,6 +41,7 @@ export declare const productVariantSchema: z.ZodObject<{
     sku: z.ZodOptional<z.ZodString>;
     image: z.ZodOptional<z.ZodString>;
     availability: z.ZodEnum<["in_stock", "out_of_stock", "preorder", "unavailable"]>;
+    stockStatus: z.ZodOptional<z.ZodEnum<["untracked", "in_stock", "low_stock", "out_of_stock"]>>;
     quantityDiscounts: z.ZodArray<z.ZodObject<{
         minimumQuantity: z.ZodNumber;
         percentOff: z.ZodNumber;
@@ -156,6 +158,7 @@ export declare const productVariantSchema: z.ZodObject<{
     };
     image?: string | undefined;
     sku?: string | undefined;
+    stockStatus?: "in_stock" | "out_of_stock" | "untracked" | "low_stock" | undefined;
 }, {
     currency: string;
     name: string;
@@ -189,6 +192,7 @@ export declare const productVariantSchema: z.ZodObject<{
     };
     image?: string | undefined;
     sku?: string | undefined;
+    stockStatus?: "in_stock" | "out_of_stock" | "untracked" | "low_stock" | undefined;
 }>;
 export declare const catalogProductCardSchema: z.ZodObject<{
     id: z.ZodString;
@@ -200,6 +204,7 @@ export declare const catalogProductCardSchema: z.ZodObject<{
     image: z.ZodOptional<z.ZodString>;
     tags: z.ZodArray<z.ZodString, "many">;
     availability: z.ZodEnum<["in_stock", "out_of_stock", "preorder", "unavailable"]>;
+    stockStatus: z.ZodOptional<z.ZodEnum<["untracked", "in_stock", "low_stock", "out_of_stock"]>>;
     badges: z.ZodArray<z.ZodObject<{
         kind: z.ZodEnum<["availability", "custom", "customizable", "savings"]>;
         label: z.ZodString;
@@ -323,6 +328,7 @@ export declare const catalogProductCardSchema: z.ZodObject<{
         intervalCount: number;
     } | null;
     image?: string | undefined;
+    stockStatus?: "in_stock" | "out_of_stock" | "untracked" | "low_stock" | undefined;
     productCode?: string | undefined;
     publicUrl?: string | undefined;
     defaultVariantId?: string | undefined;
@@ -364,6 +370,7 @@ export declare const catalogProductCardSchema: z.ZodObject<{
         intervalCount: number;
     } | null;
     image?: string | undefined;
+    stockStatus?: "in_stock" | "out_of_stock" | "untracked" | "low_stock" | undefined;
     productCode?: string | undefined;
     publicUrl?: string | undefined;
     defaultVariantId?: string | undefined;
@@ -372,6 +379,7 @@ export declare const productDetailSchema: z.ZodObject<{
     id: z.ZodString;
     title: z.ZodString;
     availability: z.ZodEnum<["in_stock", "out_of_stock", "preorder", "unavailable"]>;
+    stockStatus: z.ZodOptional<z.ZodEnum<["untracked", "in_stock", "low_stock", "out_of_stock"]>>;
     storeSlug: z.ZodString;
     productCode: z.ZodOptional<z.ZodString>;
     publicUrl: z.ZodOptional<z.ZodString>;
@@ -437,6 +445,7 @@ export declare const productDetailSchema: z.ZodObject<{
         sku: z.ZodOptional<z.ZodString>;
         image: z.ZodOptional<z.ZodString>;
         availability: z.ZodEnum<["in_stock", "out_of_stock", "preorder", "unavailable"]>;
+        stockStatus: z.ZodOptional<z.ZodEnum<["untracked", "in_stock", "low_stock", "out_of_stock"]>>;
         quantityDiscounts: z.ZodArray<z.ZodObject<{
             minimumQuantity: z.ZodNumber;
             percentOff: z.ZodNumber;
@@ -553,6 +562,7 @@ export declare const productDetailSchema: z.ZodObject<{
         };
         image?: string | undefined;
         sku?: string | undefined;
+        stockStatus?: "in_stock" | "out_of_stock" | "untracked" | "low_stock" | undefined;
     }, {
         currency: string;
         name: string;
@@ -586,6 +596,7 @@ export declare const productDetailSchema: z.ZodObject<{
         };
         image?: string | undefined;
         sku?: string | undefined;
+        stockStatus?: "in_stock" | "out_of_stock" | "untracked" | "low_stock" | undefined;
     }>, "many">;
     seo: z.ZodOptional<z.ZodObject<{
         title: z.ZodOptional<z.ZodString>;
@@ -659,7 +670,9 @@ export declare const productDetailSchema: z.ZodObject<{
         };
         image?: string | undefined;
         sku?: string | undefined;
+        stockStatus?: "in_stock" | "out_of_stock" | "untracked" | "low_stock" | undefined;
     }[];
+    stockStatus?: "in_stock" | "out_of_stock" | "untracked" | "low_stock" | undefined;
     productCode?: string | undefined;
     publicUrl?: string | undefined;
     defaultVariantId?: string | undefined;
@@ -729,7 +742,9 @@ export declare const productDetailSchema: z.ZodObject<{
         };
         image?: string | undefined;
         sku?: string | undefined;
+        stockStatus?: "in_stock" | "out_of_stock" | "untracked" | "low_stock" | undefined;
     }[];
+    stockStatus?: "in_stock" | "out_of_stock" | "untracked" | "low_stock" | undefined;
     productCode?: string | undefined;
     publicUrl?: string | undefined;
     defaultVariantId?: string | undefined;
@@ -951,6 +966,7 @@ export declare const quotedCartLineSchema: z.ZodObject<{
     productCode: z.ZodOptional<z.ZodString>;
     variantName: z.ZodOptional<z.ZodString>;
     sku: z.ZodOptional<z.ZodString>;
+    stockStatus: z.ZodOptional<z.ZodEnum<["untracked", "in_stock", "low_stock", "out_of_stock"]>>;
     unitAmount: z.ZodOptional<z.ZodNumber>;
     currency: z.ZodOptional<z.ZodString>;
     priceId: z.ZodOptional<z.ZodString>;
@@ -1126,6 +1142,7 @@ export declare const quotedCartLineSchema: z.ZodObject<{
     currency?: string | undefined;
     unitAmount?: number | undefined;
     sku?: string | undefined;
+    stockStatus?: "in_stock" | "out_of_stock" | "untracked" | "low_stock" | undefined;
     productCode?: string | undefined;
     customerAmount?: number | undefined;
     productId?: string | undefined;
@@ -1189,6 +1206,7 @@ export declare const quotedCartLineSchema: z.ZodObject<{
     currency?: string | undefined;
     unitAmount?: number | undefined;
     sku?: string | undefined;
+    stockStatus?: "in_stock" | "out_of_stock" | "untracked" | "low_stock" | undefined;
     productCode?: string | undefined;
     customerAmount?: number | undefined;
     productId?: string | undefined;
@@ -1229,6 +1247,7 @@ export declare const cartQuoteSchema: z.ZodObject<{
         productCode: z.ZodOptional<z.ZodString>;
         variantName: z.ZodOptional<z.ZodString>;
         sku: z.ZodOptional<z.ZodString>;
+        stockStatus: z.ZodOptional<z.ZodEnum<["untracked", "in_stock", "low_stock", "out_of_stock"]>>;
         unitAmount: z.ZodOptional<z.ZodNumber>;
         currency: z.ZodOptional<z.ZodString>;
         priceId: z.ZodOptional<z.ZodString>;
@@ -1404,6 +1423,7 @@ export declare const cartQuoteSchema: z.ZodObject<{
         currency?: string | undefined;
         unitAmount?: number | undefined;
         sku?: string | undefined;
+        stockStatus?: "in_stock" | "out_of_stock" | "untracked" | "low_stock" | undefined;
         productCode?: string | undefined;
         customerAmount?: number | undefined;
         productId?: string | undefined;
@@ -1467,6 +1487,7 @@ export declare const cartQuoteSchema: z.ZodObject<{
         currency?: string | undefined;
         unitAmount?: number | undefined;
         sku?: string | undefined;
+        stockStatus?: "in_stock" | "out_of_stock" | "untracked" | "low_stock" | undefined;
         productCode?: string | undefined;
         customerAmount?: number | undefined;
         productId?: string | undefined;
@@ -1546,6 +1567,7 @@ export declare const cartQuoteSchema: z.ZodObject<{
         currency?: string | undefined;
         unitAmount?: number | undefined;
         sku?: string | undefined;
+        stockStatus?: "in_stock" | "out_of_stock" | "untracked" | "low_stock" | undefined;
         productCode?: string | undefined;
         customerAmount?: number | undefined;
         productId?: string | undefined;
@@ -1621,6 +1643,7 @@ export declare const cartQuoteSchema: z.ZodObject<{
         currency?: string | undefined;
         unitAmount?: number | undefined;
         sku?: string | undefined;
+        stockStatus?: "in_stock" | "out_of_stock" | "untracked" | "low_stock" | undefined;
         productCode?: string | undefined;
         customerAmount?: number | undefined;
         productId?: string | undefined;
@@ -1790,6 +1813,7 @@ export declare const catalogResponseSchema: z.ZodObject<{
         image: z.ZodOptional<z.ZodString>;
         tags: z.ZodArray<z.ZodString, "many">;
         availability: z.ZodEnum<["in_stock", "out_of_stock", "preorder", "unavailable"]>;
+        stockStatus: z.ZodOptional<z.ZodEnum<["untracked", "in_stock", "low_stock", "out_of_stock"]>>;
         badges: z.ZodArray<z.ZodObject<{
             kind: z.ZodEnum<["availability", "custom", "customizable", "savings"]>;
             label: z.ZodString;
@@ -1913,6 +1937,7 @@ export declare const catalogResponseSchema: z.ZodObject<{
             intervalCount: number;
         } | null;
         image?: string | undefined;
+        stockStatus?: "in_stock" | "out_of_stock" | "untracked" | "low_stock" | undefined;
         productCode?: string | undefined;
         publicUrl?: string | undefined;
         defaultVariantId?: string | undefined;
@@ -1954,6 +1979,7 @@ export declare const catalogResponseSchema: z.ZodObject<{
             intervalCount: number;
         } | null;
         image?: string | undefined;
+        stockStatus?: "in_stock" | "out_of_stock" | "untracked" | "low_stock" | undefined;
         productCode?: string | undefined;
         publicUrl?: string | undefined;
         defaultVariantId?: string | undefined;
@@ -1998,6 +2024,7 @@ export declare const catalogResponseSchema: z.ZodObject<{
             intervalCount: number;
         } | null;
         image?: string | undefined;
+        stockStatus?: "in_stock" | "out_of_stock" | "untracked" | "low_stock" | undefined;
         productCode?: string | undefined;
         publicUrl?: string | undefined;
         defaultVariantId?: string | undefined;
@@ -2071,6 +2098,7 @@ export declare const catalogResponseSchema: z.ZodObject<{
             intervalCount: number;
         } | null;
         image?: string | undefined;
+        stockStatus?: "in_stock" | "out_of_stock" | "untracked" | "low_stock" | undefined;
         productCode?: string | undefined;
         publicUrl?: string | undefined;
         defaultVariantId?: string | undefined;
@@ -2289,6 +2317,7 @@ export declare const collectionDetailSchema: z.ZodObject<{
         image: z.ZodOptional<z.ZodString>;
         tags: z.ZodArray<z.ZodString, "many">;
         availability: z.ZodEnum<["in_stock", "out_of_stock", "preorder", "unavailable"]>;
+        stockStatus: z.ZodOptional<z.ZodEnum<["untracked", "in_stock", "low_stock", "out_of_stock"]>>;
         badges: z.ZodArray<z.ZodObject<{
             kind: z.ZodEnum<["availability", "custom", "customizable", "savings"]>;
             label: z.ZodString;
@@ -2412,6 +2441,7 @@ export declare const collectionDetailSchema: z.ZodObject<{
             intervalCount: number;
         } | null;
         image?: string | undefined;
+        stockStatus?: "in_stock" | "out_of_stock" | "untracked" | "low_stock" | undefined;
         productCode?: string | undefined;
         publicUrl?: string | undefined;
         defaultVariantId?: string | undefined;
@@ -2453,6 +2483,7 @@ export declare const collectionDetailSchema: z.ZodObject<{
             intervalCount: number;
         } | null;
         image?: string | undefined;
+        stockStatus?: "in_stock" | "out_of_stock" | "untracked" | "low_stock" | undefined;
         productCode?: string | undefined;
         publicUrl?: string | undefined;
         defaultVariantId?: string | undefined;
@@ -2499,6 +2530,7 @@ export declare const collectionDetailSchema: z.ZodObject<{
             intervalCount: number;
         } | null;
         image?: string | undefined;
+        stockStatus?: "in_stock" | "out_of_stock" | "untracked" | "low_stock" | undefined;
         productCode?: string | undefined;
         publicUrl?: string | undefined;
         defaultVariantId?: string | undefined;
@@ -2586,6 +2618,7 @@ export declare const collectionDetailSchema: z.ZodObject<{
             intervalCount: number;
         } | null;
         image?: string | undefined;
+        stockStatus?: "in_stock" | "out_of_stock" | "untracked" | "low_stock" | undefined;
         productCode?: string | undefined;
         publicUrl?: string | undefined;
         defaultVariantId?: string | undefined;
@@ -3080,4 +3113,5 @@ export type ProductDetail = z.infer<typeof productDetailSchema>;
 export type CheckoutSessionResult = z.infer<typeof checkoutSessionResultSchema>;
 export type SubscriptionPortalResult = z.infer<typeof subscriptionPortalResultSchema>;
 export type StorefrontStore = z.infer<typeof storefrontStoreSchema>;
+export type StockStatus = z.infer<typeof stockStatusSchema>;
 //# sourceMappingURL=public.d.ts.map
